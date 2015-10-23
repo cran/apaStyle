@@ -1,0 +1,17 @@
+dfbf8ee188e16a11d0e687b89357a572 *DESCRIPTION
+4716f6f022d42743bf0596ac959c3528 *NAMESPACE
+ca221b92ee7ad653c674a06df42e0fa0 *R/apaCorrelationMatrix.R
+374e2949b589cc04c862b43286b3e96a *R/apaDescriptives.R
+369d6d5d2d5142560aba4b74e3848d62 *R/apaMergeData.R
+403051c14b8eb0dad6985b17ecdb6849 *R/apaSignificance.R
+4b03dbe8e0792cb135652d8224b33d4e *R/apaTable.R
+f277639b4b30416b7801e05e1b8a3d89 *man/apa.cor.matrix.Rd
+be6ea9fc9f6f6b47e3fedb9ac5826fb4 *man/apa.descriptives.Rd
+2a5257e2e9723f9a5e3e626b93d879ba *man/apa.merge.Rd
+36664abbbbc4e81bc5b22a9ab1b234b3 *man/apa.signif.Rd
+cd8e8d6ef66084195291dd2e74c5edb6 *man/apa.table.Rd
+f375c183714d9a01c54c03ce1e1505c0 *tests/testthat/test-apaCorrelationMatrix.R
+c8bb97ffe64e2a2d285415b8c79fb748 *tests/testthat/test-apaDescriptives.R
+ad7a62378806da21c8e64e317131180d *tests/testthat/test-apaMerge.R
+c332286d37beabd4d8add716f4c5557d *tests/testthat/test-apaSignificance.R
+8f59336c8a62eb64f73542193d048dac *tests/testthat/test-apaTable.R
