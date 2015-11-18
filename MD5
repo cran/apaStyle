@@ -1,10 +1,11 @@
-dfbf8ee188e16a11d0e687b89357a572 *DESCRIPTION
+2b4ed93f11e0349243bb49610ad35da7 *DESCRIPTION
 4716f6f022d42743bf0596ac959c3528 *NAMESPACE
+f6f627a3b87c5a87ed3bdb48b0cefc4d *NEWS
 ca221b92ee7ad653c674a06df42e0fa0 *R/apaCorrelationMatrix.R
 374e2949b589cc04c862b43286b3e96a *R/apaDescriptives.R
 369d6d5d2d5142560aba4b74e3848d62 *R/apaMergeData.R
 403051c14b8eb0dad6985b17ecdb6849 *R/apaSignificance.R
-4b03dbe8e0792cb135652d8224b33d4e *R/apaTable.R
+879110343745b4b4462a10f80f99b654 *R/apaTable.R
 f277639b4b30416b7801e05e1b8a3d89 *man/apa.cor.matrix.Rd
 be6ea9fc9f6f6b47e3fedb9ac5826fb4 *man/apa.descriptives.Rd
 2a5257e2e9723f9a5e3e626b93d879ba *man/apa.merge.Rd

@@ -410,7 +410,7 @@ apaTable = function(data, level1.header, level1.colspan, level2.header, number, 
 
       if (level2 == TRUE) {
 
-        if (length(level1.header) != sum(level1.colspan)) {
+        if (length(level2.header) != sum(level1.colspan)) {
           error = "The sum of colspan is different from the number of columns of the dataset."
           warning(error)
           return(list(succes = error))

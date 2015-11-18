@@ -1,0 +1,7 @@
+apaStyle 0.2
+==================================================================
+BUG FIXES
+------------------------------------------------------------------
+* The sum of colspan from level 1 header didn't match the number of 
+  columns of the dataset. 
+  (reported by Mathias König) 
