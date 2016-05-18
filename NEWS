@@ -1,7 +1,23 @@
-apaStyle 0.2
+apaStyle 0.3
 ==================================================================
+
+ENHANCEMENT
+------------------------------------------------------------------
+* Added apa.regression() function for the generation of (hierarchical)
+  regression tables.
+
 BUG FIXES
 ------------------------------------------------------------------
-* The sum of colspan from level 1 header didn't match the number of 
-  columns of the dataset. 
-  (reported by Mathias König) 
+* The sum of colspan from level 1 header does not correspond with the
+  the level 2 headers.
+  (reported and fixed by Corey Brier)
+
+
+apaStyle 0.2
+==================================================================
+
+BUG FIXES
+------------------------------------------------------------------
+* The sum of colspan from level 1 header didn't match the number of
+  columns of the dataset.
+  (reported by Mathias König)

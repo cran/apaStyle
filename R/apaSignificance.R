@@ -46,7 +46,7 @@ apa.signif = function(data=data.frame()) UseMethod("apa.signif")
 ##
 apa.signif.default = function(data=data.frame()) {
 
-  est = apaSignificance(data)
+  est = apaStyleSignificance(data)
   est$call = match.call()
   class(est) = "apa.signif"
   est
@@ -68,7 +68,7 @@ print.apa.signif = function(x, ...) {
 }
 
 # The main function
-apaSignificance = function(data) {
+apaStyleSignificance = function(data) {
 
   # Initialize function
   options(warn = 0)

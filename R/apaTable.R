@@ -140,7 +140,7 @@ apa.table = function(data=data.frame(), level1.header=NULL, level1.colspan=NULL,
 ##
 apa.table.default = function(data=data.frame(), level1.header=NULL, level1.colspan=NULL, level2.header=NULL, number="XX", title="APA Table", filename="APA Table.docx", note=NULL, landscape=FALSE, save=TRUE) {
 
-  est = apaTable(data, level1.header, level1.colspan, level2.header, number, title, filename, note, landscape, save)
+  est = apaStyleTable(data, level1.header, level1.colspan, level2.header, number, title, filename, note, landscape, save)
   est$call = match.call()
   class(est) = "apa.table"
   est
@@ -167,7 +167,7 @@ print.apa.table = function(x, ...) {
 }
 
 # The main function
-apaTable = function(data, level1.header, level1.colspan, level2.header, number, title, filename, note, landscape, save) {
+apaStyleTable = function(data, level1.header, level1.colspan, level2.header, number, title, filename, note, landscape, save) {
 
   # Initialize function
   options(warn = 0)
@@ -243,45 +243,38 @@ apaTable = function(data, level1.header, level1.colspan, level2.header, number, 
 
         level2 = TRUE
 
-        # Internal function to save where to insert empty columns
-        sequence = function(x) {
-          n = length(x)
-          y = x[-1L] != x[-n] + 1
-          i = c(which(y|is.na(y)),n)
-          list(lengths = diff(c(0L,i)), values = x[utils::head(c(0L,i)+1L,-1L)])
-        }
+        # Insert empty columns between (contiguous nonmissing) level1 headers
 
-        # Insert empty columns between level1 headers
-        test1 = sequence(grep("\\w|\\S", level1.header, perl = TRUE))
+        # Find indices of nonblank elements, then indices after which to insert blank columns
+        nonblanks = grep("\\w|\\S", level1.header, perl = TRUE)
+        blankafter = nonblanks[c(diff(nonblanks) == 1, FALSE)]
 
-        if (test1$values[1] > 1) {
-          start = paste(level1.header[1:test1$values[[1]]-1], sep = "", collapse = ";")
-        }
+        # Indices after which we will have a blank column are repeated
+        indices = sort(c(seq_along(level1.header), blankafter))
+
+        # All the indices that will not be an inserted blank column
+        firstindex = !duplicated(indices)
 
         tmp.header1 = tmp.colspan = tmp.header2 = NULL
 
-        for (i in 1:length(test1$values)) {
-          n = test1$values[i] + (test1$lengths[i] - 1)
-          tmp.header1[i] = paste(level1.header[test1$values[i]:n], sep = "", collapse = "; ;")
-        }
-        tmp.header1 = paste(tmp.header1, sep = "", collapse = ";;")
-        tmp.header1 = c(start, tmp.header1)
-        tmp.header1 = unlist(strsplit(paste(tmp.header1, sep = "", collapse = ";"), split=";"))
+        # Insert the original header values into the these indices
+        tmp.header1[firstindex] = level1.header
 
-        # Insert empty columns for level 2 headers
-        test2 = first = last = grep(" ", tmp.header1, perl = TRUE)
+        # Insert a space for a blank column in all the other places
+        tmp.header1[!firstindex] = " "
 
-        for (i in 1:length(test2)) {
-          if (i == 1) {
-            tmp.colspan = c(level1.colspan[1:test2[i]-1], 1, level1.colspan[test2[i]:length(level1.colspan)])
-            tmp.header2 = c(level2.header[1:sum(tmp.colspan[1:test2[i]-1])], " ", level2.header[sum(tmp.colspan[1:test2[i]]):length(level2.header)])
-          } else {
-            tmp.colspan = c(tmp.colspan[1:first[i]], 1, level1.colspan[last[i]:length(level1.colspan)])
-            tmp.header2 = c(tmp.header2[1:sum(tmp.colspan[1:first[i]])], " ", level2.header[sum(tmp.colspan[1:last[i]]):length(level2.header)])
-          }
-          first = first - 1
-          last = last - i
-        }
+        # Make new level1 colspan: insert a 1 in between the input elements in a similar way as before
+
+        tmp.colspan[firstindex] = level1.colspan
+        tmp.colspan[!firstindex] = 1
+
+        # Insert empty columns between level2 headers to correspond with above
+        level2blankafter = cumsum(level1.colspan)[blankafter]
+        level2indices = sort(c(seq_along(level2.header), level2blankafter))
+        level2firstindex = !duplicated(level2indices)
+
+        tmp.header2[level2firstindex] = level2.header
+        tmp.header2[!level2firstindex] = " "
 
         # Save new generated headers
         level1.colspan = tmp.colspan
