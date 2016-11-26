@@ -112,6 +112,7 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
   # Define variables
   apa.report = c("M", "SD", "r")
   apa.data = data.frame(rep(NA, ncol(data)))
+  header.m = header.sd = header.merge = header.r = NULL
 
   # Check if valid variable names are supplied
   if(!is.character(variables)) {
@@ -202,8 +203,6 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
       if (merge == FALSE) {
         apa.data$mean = sprintf("%3.2f", round(apa.mean, digits = 2))
         header.m = c("M")
-      } else {
-        header.m = NULL
       }
 
     }
@@ -213,16 +212,12 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
       if (merge == FALSE) {
         apa.data$sd = sprintf("%3.2f", round(apa.sd, digits = 2))
         header.sd = c("SD")
-      } else {
-        header.sd = NULL
       }
     }
 
     if (merge == TRUE) {
       apa.data$merge = apa.merge(apa.mean, apa.sd, c("M", "SD"))$data
       header.merge = apa.merge(apa.mean, apa.sd, c("M", "SD"))$header
-    } else {
-      header.merge = NULL
     }
 
     if ("r" %in% apa.report) {
@@ -234,8 +229,6 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
       }
       apa.data = data.frame(apa.data, apa.r)
       header.r = as.vector(rbind(c(1:ncol(data)), rep("*", ncol(data))))
-    } else {
-      header.r = NULL
     }
 
     colnames(apa.data)[1] = "Variable"

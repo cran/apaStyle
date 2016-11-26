@@ -1,10 +1,18 @@
+apaStyle 0.4
+==================================================================
+
+BUG FIXES
+------------------------------------------------------------------
+* Headers in apa.descriptives were not always correctly defined in
+  case of user defined statistics
+
 apaStyle 0.3
 ==================================================================
 
 ENHANCEMENT
 ------------------------------------------------------------------
-* Added apa.regression() function for the generation of (hierarchical)
-  regression tables.
+* Added apa.regression() function for the generation of hierarchical
+  regression tables with model summary values.
 
 BUG FIXES
 ------------------------------------------------------------------
