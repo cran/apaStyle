@@ -6,7 +6,8 @@
 \usage{
 apa.descriptives(data = data.frame(), variables = NULL, report = "",
   title = "APA Table", filename = "APA Table.docx", note = NULL,
-  position = "lower", merge = FALSE, landscape = FALSE, save = TRUE)
+  position = "lower", merge = FALSE, sig = TRUE, landscape = FALSE,
+  save = TRUE)
 }
 \arguments{
 \item{data}{Raw dataset with variables.}
@@ -25,6 +26,8 @@ apa.descriptives(data = data.frame(), variables = NULL, report = "",
 
 \item{merge}{(optional) Set (\code{TRUE}) if the mean and standard deviation columns should be merged into one column.}
 
+\item{sig}{(optional) Specify whether the significance should be displayed in a separate column.}
+
 \item{landscape}{(optional) Set (\code{TRUE}) if the table should be generated in landscape mode.}
 
 \item{save}{(optional) Set (\code{FALSE}) if the table should not be saved in a document.}
@@ -38,6 +41,16 @@ apa.descriptives(data = data.frame(), variables = NULL, report = "",
 }
 \description{
 Generic method to generate an APA style table with descriptives for MS Word.
+}
+\details{
+This method can automatically generate tables with descriptive statistics. It's possible to specify which descriptives
+should be displayed. The default setting displays all the means, standard deviations, and a correlation matrix. This can
+user specified changing the (\code{report}) parameter. For large tables it is also possible to merge the mean and
+stadard deviation in one column \dQuote{\emph{M} (\emph{SD})}. This can be done by setting the \code{merge} parameter
+to \code{TRUE}. It's also possible to make the columns of the correlation matrix smaller, by removing the significance
+asterisks in the table. The significance of the correlation values are highlighted in a footnote (e.g, Correlation
+coefficients > |0.23| are significant at \emph{p} < 0.036."). This can be done by setting the \code{sig} parameter to
+\code{FALSE}.
 }
 \examples{
 

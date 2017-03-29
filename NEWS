@@ -1,3 +1,14 @@
+apaStyle 0.5
+==================================================================
+
+ENHANCEMENT
+------------------------------------------------------------------
+* Updated apa.descriptives() function. Now it's possible to ommit
+  the significance indicators in the correlation matrix. This can
+  be useful for large tables. Significance in this case is reported
+  in a footnote which reports the smallest correlation that is
+  significant at an alpha of at least 0.05.
+
 apaStyle 0.4
 ==================================================================
 

@@ -4,17 +4,20 @@
 \alias{apa.cor.matrix}
 \title{Generic method to generate a correlation matrix with values}
 \usage{
-apa.cor.matrix(data = data.frame(), position = "lower")
+apa.cor.matrix(data = data.frame(), position = "lower", sig = TRUE)
 }
 \arguments{
 \item{data}{Raw dataset with variables.}
 
 \item{position}{(optional) Specify whether the correlations should be displayed in the \code{upper}, or \code{lower} diagonal of the table.}
+
+\item{sig}{(optional) Specify whether the significance should be displayed in a separate column.}
 }
 \value{
 \code{apa.cor.matrix} object; a list consisting of
 \item{succes}{message in case of an error}
 \item{data}{the data with correlation values}
+\item{smallest}{the smallest \emph{r} value which is significant at \emph{p} < .05.}
 }
 \description{
 Generic method to generate a correlation matrix with values

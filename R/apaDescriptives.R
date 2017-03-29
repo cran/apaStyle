@@ -9,8 +9,20 @@
 #' @param  note (optional) Add a footnote to the bottom of the table.
 #' @param  position (optional) Specify whether the correlations should be displayed in the \code{upper}, or \code{lower} diagonal of the table.
 #' @param  merge (optional) Set (\code{TRUE}) if the mean and standard deviation columns should be merged into one column.
+#' @param  sig (optional) Specify whether the significance should be displayed in a separate column.
 #' @param  landscape (optional) Set (\code{TRUE}) if the table should be generated in landscape mode.
 #' @param  save (optional) Set (\code{FALSE}) if the table should not be saved in a document.
+#' @details
+#'
+#' This method can automatically generate tables with descriptive statistics. It's possible to specify which descriptives
+#' should be displayed. The default setting displays all the means, standard deviations, and a correlation matrix. This can
+#' user specified changing the (\code{report}) parameter. For large tables it is also possible to merge the mean and
+#' stadard deviation in one column \dQuote{\emph{M} (\emph{SD})}. This can be done by setting the \code{merge} parameter
+#' to \code{TRUE}. It's also possible to make the columns of the correlation matrix smaller, by removing the significance
+#' asterisks in the table. The significance of the correlation values are highlighted in a footnote (e.g, Correlation
+#' coefficients > |0.23| are significant at \emph{p} < 0.036."). This can be done by setting the \code{sig} parameter to
+#' \code{FALSE}.
+#'
 #' @return \code{apa.descriptives} object; a list consisting of
 #' \item{succes}{message in case of an error}
 #' \item{save}{flag which indicates whther the document is saved}
@@ -32,7 +44,7 @@
 #'   variables = c("Column 1", "Column 2", "Column 3", "Column 4")
 #' )
 ##
-apa.descriptives = function(data=data.frame(), variables=NULL, report="", title="APA Table", filename="APA Table.docx", note=NULL, position="lower", merge=FALSE, landscape=FALSE, save=TRUE) UseMethod("apa.descriptives")
+apa.descriptives = function(data=data.frame(), variables=NULL, report="", title="APA Table", filename="APA Table.docx", note=NULL, position="lower", merge=FALSE, sig=TRUE, landscape=FALSE, save=TRUE) UseMethod("apa.descriptives")
 
 ##
 #' Default method to generate an APA style table with descriptives for MS Word.
@@ -45,8 +57,20 @@ apa.descriptives = function(data=data.frame(), variables=NULL, report="", title=
 #' @param  note (optional) Add a footnote to the bottom of the table.
 #' @param  position (optional) Specify whether the correlations should be displayed in the \code{upper}, or \code{lower} diagonal of the table.
 #' @param  merge (optional) Set (\code{TRUE}) if the mean and standard deviation columns should be merged into one column.
+#' @param  sig (optional) Set (\code{TRUE}) if the significance asterisk should be displayed in a separate column.
 #' @param  landscape (optional) Set (\code{TRUE}) if the table should be generated in landscape mode.
 #' @param  save (optional) Set (\code{FALSE}) if the table should not be saved in a document.
+#' @details
+#'
+#' This method can automatically generate tables with descriptive statistics. It's possible to specify which descriptives
+#' should be displayed. The default setting displays all the means, standard deviations, and a correlation matrix. This can
+#' user specified changing the (\code{report}) parameter. For large tables it is also possible to merge the mean and
+#' stadard deviation in one column \dQuote{\emph{M} (\emph{SD})}. This can be done by setting the \code{merge} parameter
+#' to \code{TRUE}. It's also possible to make the columns of the correlation matrix smaller, by removing the significance
+#' asterisks in the table. The significance of the correlation values are highlighted in a footnote (e.g, Correlation
+#' coefficients > |0.23| are significant at \emph{p} < 0.036."). This can be done by setting the \code{sig} parameter to
+#' \code{FALSE}.
+#'
 #' @return \code{apa.descriptives} object; a list consisting of
 #' \item{succes}{message in case of an error}
 #' \item{save}{flag which indicates whther the document is saved}
@@ -68,9 +92,9 @@ apa.descriptives = function(data=data.frame(), variables=NULL, report="", title=
 #'   variables = c("Column 1", "Column 2", "Column 3", "Column 4")
 #' )
 ##
-apa.descriptives.default = function(data=data.frame(), variables=NULL, report="", title="APA Table", filename="APA Table.docx", note=NULL, position="lower", merge=FALSE, landscape=FALSE, save=TRUE) {
+apa.descriptives.default = function(data=data.frame(), variables=NULL, report="", title="APA Table", filename="APA Table.docx", note=NULL, position="lower", merge=FALSE, sig=TRUE, landscape=FALSE, save=TRUE) {
 
-  est = apaStyleDescriptives(data, variables, report, title, filename, note, position, merge, landscape, save)
+  est = apaStyleDescriptives(data, variables, report, title, filename, note, position, merge, sig, landscape, save)
   est$call = match.call()
   class(est) = "apa.descriptives"
   est
@@ -97,7 +121,7 @@ print.apa.descriptives = function(x, ...) {
 }
 
 # The main function
-apaStyleDescriptives = function(data, variables, report, title, filename, note, position, merge, landscape, save) {
+apaStyleDescriptives = function(data, variables, report, title, filename, note, position, merge, sig, landscape, save) {
 
   # Initialize function
   options(warn = 0)
@@ -176,6 +200,13 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
     }
   }
 
+  # Check if the sig argument is a valid type
+  if(!is.logical(sig)) {
+    error = "The sig argument is not of logical type."
+    warning(error)
+    return(list(succes = error))
+  }
+
   # Check if the landscape argument is a valid type
   if(!is.logical(landscape)) {
     error = "The landscape argument is not of logical type."
@@ -221,14 +252,23 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
     }
 
     if ("r" %in% apa.report) {
-      apa.r = as.data.frame(apa.cor.matrix(data, position = apa.position)$data, stringsAsFactors = FALSE)
+      apa.matrix = apa.cor.matrix(data, position = apa.position, sig=sig)
+      apa.r = as.data.frame(apa.matrix$data, stringsAsFactors = FALSE)
       if (nrow(apa.r) != nrow(apa.data)) {
         error = "Arguments imply differing number of rows."
         warning(error)
         return(list(succes = error))
       }
+
       apa.data = data.frame(apa.data, apa.r)
-      header.r = as.vector(rbind(c(1:ncol(data)), rep("*", ncol(data))))
+
+      # report both values and significance or only values
+      if (sig == T) {
+        header.r = as.vector(rbind(c(1:ncol(data)), rep("*", ncol(data))))
+      } else {
+        header.r = as.vector(rbind(c(1:ncol(data))))
+      }
+
     }
 
     colnames(apa.data)[1] = "Variable"
@@ -236,6 +276,14 @@ apaStyleDescriptives = function(data, variables, report, title, filename, note, 
     # Put numbers in front of the variable names
     apa.data[[1]] = strsplit(paste(seq(1:length(variables)), ". ", variables, collapse = ";", sep = ""), ";")[[1]]
     apa.header = c("Variable", header.m, header.sd, header.merge, header.r)
+
+    # Create footnote is significant asterisk is not reported
+    if (sig == F) {
+      smallest.r = apa.matrix$smallest
+      smallest.val = abs(smallest.r$val)
+      note.sig = ifelse(is.na(smallest.r$sig), "", ifelse(smallest.r$sig < .001, paste(c("Correlation coefficients \u2265 |", smallest.val, "| are significant at p < 0.001."), collapse = ""), paste(c("Correlation coefficients \u2265 |", smallest.val, "| are significant at p < ", smallest.r$sig, "."), collapse = "")))
+      note = paste(c(note, note.sig), collapse = " ")
+    }
 
     apa.table = apaStyle::apa.table(data = data.frame(apa.data), level1.header = apa.header, title = title, filename = filename, note = note, landscape = landscape, save = save)
 
